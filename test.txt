@@ -1,0 +1,9 @@
+1. Buat database di MySQL dengan nama 'smartrecycling'
+2. Ubah file app\__test__\db.js dan app\lib\dbConnect.js
+3. Ikutin DB_HOST sesuai localhost MySQL
+4. Import file 'smartrecycling.sql' ke database 'smartrecycling'
+5. Import file 'backup.sql' ke database 'smartrecycling'
+6. Kalo gagal import, di copy aja isi SQL nya terus di enter biar langsung ke eksekusi
+7. Login dulu ke https//localhost/api/signin biar dapet token, jangan lupa HTTP method nya POST
+8. Copy token yang didapat ke dalam variable token
+9. Jalankan test dengan perintah "npm run test". Kalau coverage "npm run coverage"
