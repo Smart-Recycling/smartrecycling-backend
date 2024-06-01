@@ -8,7 +8,7 @@ describe("Event Controller", () => {
   describe("Create Event", () => {
     it("should create a new event", async () => {
       const user = {
-        id: "2bc486a6-dc5a-4608-a3ad-84575e0da497",
+        id: "784cb972-734d-4461-9d15-34ddac8c4a6d",
       };
 
       const newEvent = {
@@ -24,6 +24,20 @@ describe("Event Controller", () => {
     });
   });
 
+  describe("Get Event", () => {
+    it("should get a list of events", async () => {
+      const response = await supertest(app).get("/api/events").set("Authorization", `${token}`).expect(200);
+
+      expect(response.body.status).toBe(200);
+    });
+
+    it("should return 404 if no Bearer token is provided", async () => {
+      const response = await supertest(app).get("/api/events").expect(401);
+
+      expect(response.body.status).toBe(401);
+    });
+  });
+
   describe("Update Event", () => {
     it("should update an existing event", async () => {
       const eventId = "2";
@@ -32,7 +46,7 @@ describe("Event Controller", () => {
         title: "Updated Test Event",
         description: "This is an updated test event.",
         path_image: "/images/updated-test-event.jpg",
-        user_id: "2bc486a6-dc5a-4608-a3ad-84575e0da497",
+        user_id: "784cb972-734d-4461-9d15-34ddac8c4a6d",
       };
 
       const response = await supertest(app).put(`/api/events/${eventId}`).set("Authorization", `${token}`).send(updatedEvent).expect(200);

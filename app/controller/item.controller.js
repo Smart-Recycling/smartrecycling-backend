@@ -1,7 +1,5 @@
-import { verifyToken } from "../lib/tokenHandler.js"
-import connectToDatabase from "../lib/dbConnect.js"
-
-const dbPool = await connectToDatabase()
+import { verifyToken } from "../lib/tokenHandler.js";
+import dbPool from "../lib/dbConnect.js";
 
 export const getItems = async (req, res, next) => {
   try {
@@ -9,22 +7,22 @@ export const getItems = async (req, res, next) => {
       return res.status(401).json({
         status: 401,
         message: "Unauthorized: Bearer token required",
-      })
+      });
     }
 
-    verifyToken(req.headers.access_token)
+    verifyToken(req.headers.access_token);
 
-    const [itemRows] = await dbPool.query("SELECT * FROM Item")
-    const items = itemRows
+    const [itemRows] = await dbPool.query("SELECT * FROM Item");
+    const items = itemRows;
 
     res.json({
       status: 200,
       data: items,
-    })
+    });
   } catch (error) {
-    next(error)
+    next(error);
   }
-}
+};
 
 export const createItem = async (req, res, next) => {
   try {
@@ -32,22 +30,22 @@ export const createItem = async (req, res, next) => {
       return res.status(401).json({
         status: 401,
         message: "Unauthorized: Bearer token required",
-      })
+      });
     }
 
-    const data = verifyToken(req.headers.access_token)
-    const { name, points, total } = req.body
+    const data = verifyToken(req.headers.access_token);
+    const { name, points, total } = req.body;
 
-    const [createdItem] = await dbPool.query("INSERT INTO Item (name, points, total) VALUES (?, ?, ?)", [name, points, total])
+    const [createdItem] = await dbPool.query("INSERT INTO Item (name, points, total) VALUES (?, ?, ?)", [name, points, total]);
 
     res.status(201).json({
       status: 201,
       data: createdItem,
-    })
+    });
   } catch (error) {
-    next(error)
+    next(error);
   }
-}
+};
 
 export const updateItem = async (req, res, next) => {
   try {
@@ -55,33 +53,33 @@ export const updateItem = async (req, res, next) => {
       return res.status(401).json({
         status: 401,
         message: "Unauthorized: Bearer token required",
-      })
+      });
     }
 
-    const data = verifyToken(req.headers.access_token)
-    const { index } = req.params // Assuming the index is part of the request URL
+    const data = verifyToken(req.headers.access_token);
+    const { index } = req.params; // Assuming the index is part of the request URL
 
-    const existingItem = await dbPool.query("SELECT * FROM Item WHERE id = ?", [index])
+    const existingItem = await dbPool.query("SELECT * FROM Item WHERE id = ?", [index]);
 
     if (!existingItem.length) {
       return res.status(404).json({
         status: 404,
         message: "Item not found",
-      })
+      });
     }
 
-    const { name, points, total } = req.body
+    const { name, points, total } = req.body;
 
-    await dbPool.query("UPDATE Item SET name = ?, points = ?, total = ? WHERE id = ?", [name, points, total, index])
+    await dbPool.query("UPDATE Item SET name = ?, points = ?, total = ? WHERE id = ?", [name, points, total, index]);
 
-    const [updatedItemRows] = await dbPool.query("SELECT * FROM Item WHERE id = ?", [index])
-    const updatedItem = updatedItemRows[0]
+    const [updatedItemRows] = await dbPool.query("SELECT * FROM Item WHERE id = ?", [index]);
+    const updatedItem = updatedItemRows[0];
 
     res.status(200).json({
       status: 200,
       data: updatedItem,
-    })
+    });
   } catch (error) {
-    next(error)
+    next(error);
   }
-}
+};

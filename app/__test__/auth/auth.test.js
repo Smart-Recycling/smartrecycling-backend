@@ -5,15 +5,15 @@ const app = server();
 
 describe("POST User Authentication (/auth)", () => {
   describe("Creating  User Account (/signup)", () => {
-    // change email if want to run again
+    const random = Math.floor(Math.random() * 1000);
     it("should return 201", async () => {
       const account = {
         name: "Jest Test Account",
-        email: "jesttest9@gmail.com",
+        email: `jesttest${random}@gmail.com`,
         password: "jest123",
       };
 
-      await supertest(app).post("/auth/signup").send(account).expect(201);
+      await supertest(app).post("/api/signup").send(account).expect(201);
     });
   });
 });
@@ -26,7 +26,7 @@ describe("Creating User Account with Exist Email (/signup)", () => {
       password: "jest123",
     };
 
-    await supertest(app).post("/auth/signup").send(accountDetail).expect(400);
+    await supertest(app).post("/api/signup").send(accountDetail).expect(400);
   });
 });
 
@@ -37,7 +37,7 @@ describe("Login User Account (/signin)", () => {
       password: "jest123",
     };
 
-    await supertest(app).post("/auth/signin").send(accountDetail).expect(200);
+    await supertest(app).post("/api/signin").send(accountDetail).expect(200);
   });
 });
 
@@ -48,6 +48,6 @@ describe("Login User Account where password incorrect (/signin)", () => {
       password: "1234424132",
     };
 
-    await supertest(app).post("/auth/signin").send(accountDetail).expect(422);
+    await supertest(app).post("/api/signin").send(accountDetail).expect(422);
   });
 });

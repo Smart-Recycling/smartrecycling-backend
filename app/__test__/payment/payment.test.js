@@ -7,7 +7,7 @@ const app = testServer();
 describe("Payment Controller", () => {
   describe("Get Payment History", () => {
     it("should get payment history for a user", async () => {
-      const userId = "f2da6afa-2d64-4138-ba28-3884339a6ff8";
+      const userId = "784cb972-734d-4461-9d15-34ddac8c4a6d";
 
       const response = await supertest(app).get(`/api/payment-history/${userId}`).set("Authorization", token).expect(200);
 
@@ -26,7 +26,7 @@ describe("Payment Controller", () => {
   describe("Create Payment Method", () => {
     it("should create a new payment method", async () => {
       const newPaymentMethod = {
-        user_id: "f2da6afa-2d64-4138-ba28-3884339a6ff8",
+        user_id: "784cb972-734d-4461-9d15-34ddac8c4a6d",
         method_type: "QRIS",
         card_number: "1234567890123456",
         expiration_date: "2023-12-31",

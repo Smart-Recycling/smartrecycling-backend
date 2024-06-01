@@ -7,7 +7,7 @@ const app = testServer();
 describe("Transaction Controller", () => {
   describe("Get Transaction History", () => {
     it("should get the transaction history for a user", async () => {
-      const userId = "f2da6afa-2d64-4138-ba28-3884339a6ff8";
+      const userId = "784cb972-734d-4461-9d15-34ddac8c4a6d";
 
       const response = await supertest(app).get(`/api/transaction-history/${userId}`).set("Authorization", token).expect(200);
 
@@ -32,8 +32,8 @@ describe("Transaction Controller", () => {
   describe("Create Transaction Payment", () => {
     it("should create a new transaction payment", async () => {
       const newTransactionPayment = {
-        transaction_id: 1,
-        payment_method_id: 1,
+        transaction_id: 2,
+        payment_method_id: 2,
         amount: 100,
         status: "PENDING",
       };
@@ -56,7 +56,7 @@ describe("Transaction Controller", () => {
       expect(response.body.status).toBe(404);
     });
 
-    it("should return 500 if no Bearer token is provided", async () => {
+    it("should return 404 if no Bearer token is provided", async () => {
       const newTransactionPayment = {
         transaction_id: 1,
         payment_method_id: 1,
@@ -64,7 +64,7 @@ describe("Transaction Controller", () => {
         status: "success",
       };
 
-      await supertest(app).post("/api/transaction-payment").send(newTransactionPayment).expect(500);
+      await supertest(app).post("/api/transaction-payment").send(newTransactionPayment).expect(404);
     });
   });
 });

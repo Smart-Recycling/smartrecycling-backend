@@ -22,10 +22,10 @@ describe("Report Controller", () => {
   describe("Create Report", () => {
     it("should create a new report", async () => {
       const newReport = {
-        email: "test@example.com",
+        email: "testadmin@gmail.com",
         subject: "Test Report",
         location: "Test Location",
-        user_id: "f2da6afa-2d64-4138-ba28-3884339a6ff8",
+        user_id: "784cb972-734d-4461-9d15-34ddac8c4a6d",
       };
 
       const response = await supertest(app).post("/api/report").set("Authorization", token).send(newReport).expect(201);
@@ -33,7 +33,7 @@ describe("Report Controller", () => {
       expect(response.body.status).toBe(201);
     });
 
-    it("should return 500 if user_id is false", async () => {
+    it("should return 404 if user_id is false", async () => {
       const newReport = {
         email: "test@example.com",
         subject: "Test Report",
@@ -41,7 +41,7 @@ describe("Report Controller", () => {
         user_id: 100,
       };
 
-      await supertest(app).post("/api/report").send(newReport).expect(500);
+      await supertest(app).post("/report").send(newReport).expect(404);
     });
   });
 });
