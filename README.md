@@ -16,6 +16,10 @@ Smart Recycling API is built using Express.js and MySQL. Below is the documentat
 
 ---
 
+## Run testing
+
+Follow the following steps to run the test [on this file](./test.txt)
+
 ## Usage
 
 Test the API using [`POSTMAN`](https://www.postman.com/) or any other API testing tool.
