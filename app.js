@@ -3,7 +3,7 @@ import cors from "cors"
 import routes from "./app/routes/routes.js"
 
 const app = express()
-const port = process.env.PORT || 5010
+const port = process.env.PORT || 3001
 const host = process.env.HOST || "https://api.smart-recycling.my.id/api-docs/"
 
 const corsOptions = {

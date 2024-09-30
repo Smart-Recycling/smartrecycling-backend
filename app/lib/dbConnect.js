@@ -45,7 +45,7 @@ const environments = {
   },
 }
 
-const NODE_ENV = "testing"
+const NODE_ENV = "production"
 
 const selectedEnvironment = environments[NODE_ENV]
 console.log(selectedEnvironment)
