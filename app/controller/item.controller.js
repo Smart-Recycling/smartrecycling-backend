@@ -1,9 +1,11 @@
 import { verifyToken } from "../lib/tokenHandler.js";
 import dbPool from "../lib/dbConnect.js";
 
+const connection = await dbPool();
+
 export const getItems = async (req, res, next) => {
   try {
-    if (!req.headers.authorization || !req.headers.authorization.startsWith("Bearer ")) {
+    if (!req.headers.authorization?.startsWith("Bearer ")) {
       return res.status(401).json({
         status: 401,
         message: "Unauthorized: Bearer token required",
@@ -12,7 +14,7 @@ export const getItems = async (req, res, next) => {
 
     verifyToken(req.headers.access_token);
 
-    const [itemRows] = await dbPool.query("SELECT * FROM Item");
+    const [itemRows] = await connection.query("SELECT * FROM Item");
     const items = itemRows;
 
     res.json({
@@ -26,7 +28,7 @@ export const getItems = async (req, res, next) => {
 
 export const createItem = async (req, res, next) => {
   try {
-    if (!req.headers.authorization || !req.headers.authorization.startsWith("Bearer ")) {
+    if (!req.headers.authorization?.startsWith("Bearer ")) {
       return res.status(401).json({
         status: 401,
         message: "Unauthorized: Bearer token required",
@@ -36,7 +38,7 @@ export const createItem = async (req, res, next) => {
     const data = verifyToken(req.headers.access_token);
     const { name, points, total } = req.body;
 
-    const [createdItem] = await dbPool.query("INSERT INTO Item (name, points, total) VALUES (?, ?, ?)", [name, points, total]);
+    const [createdItem] = await connection.query("INSERT INTO Item (name, points, total) VALUES (?, ?, ?)", [name, points, total]);
 
     res.status(201).json({
       status: 201,
@@ -49,7 +51,7 @@ export const createItem = async (req, res, next) => {
 
 export const updateItem = async (req, res, next) => {
   try {
-    if (!req.headers.authorization || !req.headers.authorization.startsWith("Bearer ")) {
+    if (!req.headers.authorization?.startsWith("Bearer ")) {
       return res.status(401).json({
         status: 401,
         message: "Unauthorized: Bearer token required",
@@ -59,7 +61,7 @@ export const updateItem = async (req, res, next) => {
     const data = verifyToken(req.headers.access_token);
     const { index } = req.params; // Assuming the index is part of the request URL
 
-    const existingItem = await dbPool.query("SELECT * FROM Item WHERE id = ?", [index]);
+    const existingItem = await connection.query("SELECT * FROM Item WHERE id = ?", [index]);
 
     if (!existingItem.length) {
       return res.status(404).json({
@@ -70,9 +72,9 @@ export const updateItem = async (req, res, next) => {
 
     const { name, points, total } = req.body;
 
-    await dbPool.query("UPDATE Item SET name = ?, points = ?, total = ? WHERE id = ?", [name, points, total, index]);
+    await connection.query("UPDATE Item SET name = ?, points = ?, total = ? WHERE id = ?", [name, points, total, index]);
 
-    const [updatedItemRows] = await dbPool.query("SELECT * FROM Item WHERE id = ?", [index]);
+    const [updatedItemRows] = await connection.query("SELECT * FROM Item WHERE id = ?", [index]);
     const updatedItem = updatedItemRows[0];
 
     res.status(200).json({
