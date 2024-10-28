@@ -41,3 +41,36 @@ export const createReport = async (req, res, next) => {
     next(error);
   }
 };
+
+export const updateReport = async (req, res, next) => {
+  try {
+    const { email, subject, location, user_id } = req.body;
+    const { id } = req.params;
+
+    // Update the report using raw SQL
+    const [updatedReport] = await connection.query("UPDATE Report SET email = ?, subject = ?, location = ?, user_id = ? WHERE id = ?", [email, subject, location, user_id, id]);
+
+    res.json({
+      status: 200,
+      data: updatedReport,
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
+export const deleteReport = async (req, res, next) => {
+  try {
+    const { id } = req.params;
+
+    // Delete the report using raw SQL
+    const [deletedReport] = await connection.query("DELETE FROM Report WHERE id = ?", [id]);
+
+    res.json({
+      status: 200,
+      data: deletedReport,
+    });
+  } catch (error) {
+    next(error);
+  }
+};
