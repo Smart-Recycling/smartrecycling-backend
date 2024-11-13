@@ -1,9 +1,11 @@
 import { verifyToken } from "../lib/tokenHandler.js";
 import dbPool from "../lib/dbConnect.js";
 
+const connection = await dbPool();
+
 export const getUser = async (req, res, next) => {
   try {
-    if (!req.headers.authorization || !req.headers.authorization.startsWith("Bearer ")) {
+    if (!req.headers.authorization?.startsWith("Bearer ")) {
       return res.status(401).json({
         status: 401,
         message: "Unauthorized: Bearer token required",
@@ -12,7 +14,7 @@ export const getUser = async (req, res, next) => {
 
     const data = verifyToken(req.headers.access_token);
 
-    const [userRows] = await dbPool.query("SELECT * FROM User WHERE id = ?", [data.id]);
+    const [userRows] = await connection.query("SELECT * FROM User WHERE id = ?", [data.id]);
     const user = userRows[0];
 
     if (!user) {
@@ -40,7 +42,7 @@ export const getUser = async (req, res, next) => {
 export const getAllUsers = async (req, res, next) => {
   try {
     // Check if the request is authorized with a valid admin token
-    if (!req.headers.authorization || !req.headers.authorization.startsWith("Bearer ")) {
+    if (!req.headers.authorization?.startsWith("Bearer ")) {
       return res.status(401).json({
         status: 401,
         message: "Unauthorized: Bearer token required",
@@ -49,7 +51,7 @@ export const getAllUsers = async (req, res, next) => {
 
     // Verify the token and ensure the user has an admin role
     const data = verifyToken(req.headers.access_token);
-    const [adminUser] = await dbPool.query("SELECT * FROM User WHERE id = ? AND role = 'ADMIN'", [data.id]);
+    const [adminUser] = await connection.query("SELECT * FROM User WHERE id = ? AND role = 'ADMIN'", [data.id]);
 
     if (!adminUser || adminUser.length === 0) {
       return res.status(403).json({
@@ -59,7 +61,7 @@ export const getAllUsers = async (req, res, next) => {
     }
 
     // Fetch all users
-    const [usersRows] = await dbPool.query("SELECT * FROM User");
+    const [usersRows] = await connection.query("SELECT * FROM User");
     const users = usersRows;
 
     res.json({
@@ -83,10 +85,10 @@ export const postPointByUserId = async (req, res, next) => {
     }
 
     // Update the user's points based on the provided UUID
-    await dbPool.query("UPDATE User SET points = ? WHERE id = ?", [points, uuid]);
+    await connection.query("UPDATE User SET points = ? WHERE id = ?", [points, uuid]);
 
     // Fetch the updated user details
-    const [updatedUserRows] = await dbPool.query("SELECT * FROM User WHERE id = ?", [uuid]);
+    const [updatedUserRows] = await connection.query("SELECT * FROM User WHERE id = ?", [uuid]);
     const updatedUser = updatedUserRows[0];
 
     res.json({
@@ -117,10 +119,10 @@ export const changeUserRole = async (req, res, next) => {
     }
 
     // Update the user's role based on the provided UUID
-    await dbPool.query("UPDATE User SET role = ? WHERE id = ?", [newRole, uuid]);
+    await connection.query("UPDATE User SET role = ? WHERE id = ?", [newRole, uuid]);
 
     // Fetch the updated user details
-    const [updatedUserRows] = await dbPool.query("SELECT * FROM User WHERE id = ?", [uuid]);
+    const [updatedUserRows] = await connection.query("SELECT * FROM User WHERE id = ?", [uuid]);
     const updatedUser = updatedUserRows[0];
 
     res.json({

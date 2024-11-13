@@ -1,9 +1,11 @@
 import dbPool from "../lib/dbConnect.js";
 import { verifyToken } from "../lib/tokenHandler.js";
 
+const connection = await dbPool();
+
 export const getEvent = async (req, res, next) => {
   try {
-    if (!req.headers.authorization || !req.headers.authorization.startsWith("Bearer ")) {
+    if (!req.headers.authorization?.startsWith("Bearer ")) {
       return res.status(401).json({
         status: 401,
         message: "Unauthorized: Bearer token required",
@@ -13,7 +15,7 @@ export const getEvent = async (req, res, next) => {
     const data = verifyToken(req.headers.access_token);
 
     // Your existing code to fetch events goes here
-    const events = await dbPool.query("SELECT * FROM Event");
+    const events = await connection.query("SELECT * FROM Event");
 
     res.json({
       status: 200,
@@ -28,7 +30,7 @@ export const createEvent = async (req, res, next) => {
   try {
     const { title, description, path_image, user_id } = req.body;
 
-    const [userResult] = await dbPool.query("SELECT * FROM User WHERE id = ?", [user_id]);
+    const [userResult] = await connection.query("SELECT * FROM User WHERE id = ?", [user_id]);
 
     if (userResult.length === 0) {
       return res.status(404).json({
@@ -37,7 +39,7 @@ export const createEvent = async (req, res, next) => {
       });
     }
 
-    const [createdEvent] = await dbPool.query("INSERT INTO Event (title, description, path_image, user_id) VALUES (?, ?, ?, ?)", [title, description, path_image, user_id]);
+    const [createdEvent] = await connection.query("INSERT INTO Event (title, description, path_image, user_id) VALUES (?, ?, ?, ?)", [title, description, path_image, user_id]);
 
     res.status(201).json({
       status: 201,
@@ -54,7 +56,7 @@ export const updateEvent = async (req, res, next) => {
     const { title, description, path_image, user_id } = req.body;
 
     // Check if the event exists
-    const [existingEvent] = await dbPool.query("SELECT * FROM Event WHERE id = ?", [eventId]);
+    const [existingEvent] = await connection.query("SELECT * FROM Event WHERE id = ?", [eventId]);
 
     if (existingEvent.length === 0) {
       return res.status(404).json({
@@ -64,7 +66,7 @@ export const updateEvent = async (req, res, next) => {
     }
 
     // Check if the user exists
-    const [userResult] = await dbPool.query("SELECT * FROM User WHERE id = ?", [user_id]);
+    const [userResult] = await connection.query("SELECT * FROM User WHERE id = ?", [user_id]);
 
     if (userResult.length === 0) {
       return res.status(404).json({
@@ -74,7 +76,7 @@ export const updateEvent = async (req, res, next) => {
     }
 
     // Update the event
-    await dbPool.query("UPDATE Event SET title = ?, description = ?, path_image = ?, user_id = ? WHERE id = ?", [title, description, path_image, user_id, eventId]);
+    await connection.query("UPDATE Event SET title = ?, description = ?, path_image = ?, user_id = ? WHERE id = ?", [title, description, path_image, user_id, eventId]);
 
     res.json({
       status: 200,

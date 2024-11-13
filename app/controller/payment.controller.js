@@ -1,11 +1,13 @@
 import dbPool from "../lib/dbConnect.js";
 
+const connection = await dbPool();
+
 export const getPaymentHistory = async (req, res, next) => {
   try {
     const { user_id } = req.params;
 
     // Check if the user exists
-    const [userResult] = await dbPool.query("SELECT * FROM User WHERE id = ?", [user_id]);
+    const [userResult] = await connection.query("SELECT * FROM User WHERE id = ?", [user_id]);
 
     if (userResult.length === 0) {
       return res.status(404).json({
@@ -15,7 +17,7 @@ export const getPaymentHistory = async (req, res, next) => {
     }
 
     // Retrieve payment history for the user
-    const [paymentHistory] = await dbPool.query(
+    const [paymentHistory] = await connection.query(
       "SELECT * FROM TransactionPayment tp " + "INNER JOIN ExchangeTransaction et ON tp.transaction_id = et.id " + "INNER JOIN PaymentMethod pm ON tp.payment_method_id = pm.id " + "WHERE et.user_id = ?",
       [user_id]
     );
@@ -34,7 +36,7 @@ export const createPaymentMethod = async (req, res, next) => {
     const { user_id, method_type, card_number, expiration_date, cvv } = req.body;
 
     // Check if the user exists
-    const [userResult] = await dbPool.query("SELECT * FROM User WHERE id = ?", [user_id]);
+    const [userResult] = await connection.query("SELECT * FROM User WHERE id = ?", [user_id]);
 
     if (userResult.length === 0) {
       return res.status(404).json({
@@ -44,7 +46,7 @@ export const createPaymentMethod = async (req, res, next) => {
     }
 
     // Insert payment method into the database
-    const [createdPaymentMethod] = await dbPool.query("INSERT INTO PaymentMethod (user_id, method_type, card_number, expiration_date, cvv) VALUES (?, ?, ?, ?, ?)", [user_id, method_type, card_number, expiration_date, cvv]);
+    const [createdPaymentMethod] = await connection.query("INSERT INTO PaymentMethod (user_id, method_type, card_number, expiration_date, cvv) VALUES (?, ?, ?, ?, ?)", [user_id, method_type, card_number, expiration_date, cvv]);
 
     res.status(201).json({
       status: 201,
