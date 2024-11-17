@@ -93,4 +93,21 @@ export const authController = {
       next(error);
     }
   },
+
+  signOut: async (req, res, next) => {
+    try {
+      const { user } = req.body;
+
+      await connection.query("DELETE FROM RefreshToken WHERE user_id = ?", [
+        user.id,
+      ]);
+
+      res.status(200).json({
+        status: 200,
+        message: "Successfully logged out",
+      });
+    } catch (error) {
+      next(error);
+    }
+  },
 };
