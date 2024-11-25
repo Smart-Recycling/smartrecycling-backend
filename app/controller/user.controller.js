@@ -1,7 +1,7 @@
 import { verifyToken } from "../lib/tokenHandler.js";
 import dbPool from "../lib/dbConnect.js";
 
-const connection = await dbPool();
+const connection = dbPool();
 
 export const getUser = async (req, res, next) => {
   try {

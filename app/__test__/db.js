@@ -2,10 +2,10 @@ import mysql from "mysql2/promise"
 
 const connectionConfig = {
   host: "localhost",
-  port: 3307,
+  port: 41181,
   user: "root",
-  password: "root",
-  database: "new-recycling",
+  password: "admin",
+  database: "smartrecycling",
 }
 
 export const createDatabaseConnection = async () => {
@@ -18,4 +18,4 @@ export const createDatabaseConnection = async () => {
   }
 }
 
-export const token = "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6Ijc4NGNiOTcyLTczNGQtNDQ2MS05ZDE1LTM0ZGRhYzhjNGE2ZCIsImlhdCI6MTcwNTMzMzQzNiwiZXhwIjoxNzA1MzQ0MjM2fQ.7NsAzhPHN4tQ91BkeYXMpDTAxU0O8EVjA2VLfMbGIdw"
+export const token = "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImQwZDMwODQ4LTZkYzYtNDYwYi05MGU0LWFiM2YxNmMwNmRmNCIsImlhdCI6MTczMjUxNjI2OCwiZXhwIjoxNzMyNTI3MDY4fQ.YbxCbifAOhkdegrdBgucceo2TMI4PNDD3n71B1hxu0U"

@@ -1,14 +1,13 @@
 import dbPool from "../lib/dbConnect.js";
 
-const connection = await dbPool();
+const connection = dbPool();
 
 export const getTransactionHistory = async (req, res, next) => {
   try {
     const { user_id } = req.params;
 
     // Check if the user exists
-    const [userResult] = await connection.query("SELECT * FROM User WHERE id = ?", [user_id]);
-
+    const [userResult] = await connection.query("SELECT * FROM TransactionPayment WHERE id = ?", [user_id]);
     if (userResult.length === 0) {
       return res.status(404).json({
         status: 404,

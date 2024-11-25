@@ -3,7 +3,7 @@ import bcryptjs from "bcryptjs";
 import { generateToken, hashRefreshToken } from "../lib/tokenHandler.js";
 import { v4 as uuidv4 } from "uuid";
 
-const connection = await dbPool();
+const connection = dbPool();
 
 export const authController = {
   signUp: async (req, res, next) => {

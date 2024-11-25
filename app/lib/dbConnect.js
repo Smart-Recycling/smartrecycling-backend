@@ -1,32 +1,21 @@
+"use strict";
+
 import mysql from "mysql2/promise";
-import { config } from "dotenv";
+import dotenv from "dotenv";
 
-config();
+dotenv.config();
 
-const {
-  PROD_DB_HOST,
-  PROD_DB_PORT,
-  PROD_DB_NAME,
-  PROD_DB_USER,
-  PROD_DB_PASSWORD,
-} = process.env;
-
-console.log(PROD_DB_HOST, PROD_DB_PORT, PROD_DB_NAME, PROD_DB_USER, PROD_DB_PASSWORD);
-
-async function dbPool() {
-  try {
-    const connection = await mysql.createConnection({
-      host: PROD_DB_HOST,
-      port: PROD_DB_PORT,
-      user: PROD_DB_USER,
-      database: PROD_DB_NAME,
-      password: PROD_DB_PASSWORD,
-    });
-    return connection;
-  } catch (error) {
-    console.error("Error connecting to database:", error);
-    throw error;
-  }
-}
+const dbPool = () => {
+  return mysql.createPool({
+    host: "40.90.171.103",
+    port: 31520,
+    user: "root",
+    password: "root",
+    database: "smart-recycling-db",
+    waitForConnections: true,
+    connectionLimit: 10,
+    queueLimit: 0,
+  });
+};
 
 export default dbPool;

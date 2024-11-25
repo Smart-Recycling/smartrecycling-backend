@@ -23,16 +23,16 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">9.3% </span>
+                <span class="strong">11.36% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>4/43</span>
+                <span class='fraction'>5/44</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/22</span>
+                <span class='fraction'>0/18</span>
             </div>
         
             
@@ -44,9 +44,9 @@
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">9.3% </span>
+                <span class="strong">11.36% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>4/43</span>
+                <span class='fraction'>5/44</span>
             </div>
         
             
@@ -57,7 +57,7 @@
         <template id="filterTemplate">
             <div class="quiet">
                 Filter:
-                <input oninput="onInput()" type="search" id="fileSearch">
+                <input type="search" id="fileSearch">
             </div>
         </template>
     </div>
@@ -203,8 +203,12 @@
 <a name='L138'></a><a href='#L138'>138</a>
 <a name='L139'></a><a href='#L139'>139</a>
 <a name='L140'></a><a href='#L140'>140</a>
-<a name='L141'></a><a href='#L141'>141</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L141'></a><a href='#L141'>141</a>
+<a name='L142'></a><a href='#L142'>142</a>
+<a name='L143'></a><a href='#L143'>143</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">7x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">7x</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -346,9 +350,11 @@
 <span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import { verifyToken } from "../lib/tokenHandler.js";
 import dbPool from "../lib/dbConnect.js";
 &nbsp;
+const connection = dbPool();
+&nbsp;
 export const getUser = <span class="fstat-no" title="function not covered" >as</span>ync (req, res, next) =&gt; {
 <span class="cstat-no" title="statement not covered" >  try {</span>
-<span class="cstat-no" title="statement not covered" >    if (!req.headers.authorization || !req.headers.authorization.startsWith("Bearer ")) {</span>
+<span class="cstat-no" title="statement not covered" >    if (!req.headers.authorization?.startsWith("Bearer ")) {</span>
 <span class="cstat-no" title="statement not covered" >      return res.status(401).json({</span>
         status: 401,
         message: "Unauthorized: Bearer token required",
@@ -357,7 +363,7 @@ export const getUser = <span class="fstat-no" title="function not covered" >as</
 &nbsp;
     const data = <span class="cstat-no" title="statement not covered" >verifyToken(req.headers.access_token);</span>
 &nbsp;
-    const [userRows] = <span class="cstat-no" title="statement not covered" >await dbPool.query("SELECT * FROM User WHERE id = ?", [data.id]);</span>
+    const [userRows] = <span class="cstat-no" title="statement not covered" >await connection.query("SELECT * FROM User WHERE id = ?", [data.id]);</span>
     const user = <span class="cstat-no" title="statement not covered" >userRows[0];</span>
 &nbsp;
 <span class="cstat-no" title="statement not covered" >    if (!user) {</span>
@@ -385,7 +391,7 @@ export const getUser = <span class="fstat-no" title="function not covered" >as</
 export const getAllUsers = <span class="fstat-no" title="function not covered" >as</span>ync (req, res, next) =&gt; {
 <span class="cstat-no" title="statement not covered" >  try {</span>
     // Check if the request is authorized with a valid admin token
-<span class="cstat-no" title="statement not covered" >    if (!req.headers.authorization || !req.headers.authorization.startsWith("Bearer ")) {</span>
+<span class="cstat-no" title="statement not covered" >    if (!req.headers.authorization?.startsWith("Bearer ")) {</span>
 <span class="cstat-no" title="statement not covered" >      return res.status(401).json({</span>
         status: 401,
         message: "Unauthorized: Bearer token required",
@@ -394,7 +400,7 @@ export const getAllUsers = <span class="fstat-no" title="function not covered" >
 &nbsp;
     // Verify the token and ensure the user has an admin role
     const data = <span class="cstat-no" title="statement not covered" >verifyToken(req.headers.access_token);</span>
-    const [adminUser] = <span class="cstat-no" title="statement not covered" >await dbPool.query("SELECT * FROM User WHERE id = ? AND role = 'ADMIN'", [data.id]);</span>
+    const [adminUser] = <span class="cstat-no" title="statement not covered" >await connection.query("SELECT * FROM User WHERE id = ? AND role = 'ADMIN'", [data.id]);</span>
 &nbsp;
 <span class="cstat-no" title="statement not covered" >    if (!adminUser || adminUser.length === 0) {</span>
 <span class="cstat-no" title="statement not covered" >      return res.status(403).json({</span>
@@ -404,7 +410,7 @@ export const getAllUsers = <span class="fstat-no" title="function not covered" >
     }
 &nbsp;
     // Fetch all users
-    const [usersRows] = <span class="cstat-no" title="statement not covered" >await dbPool.query("SELECT * FROM User");</span>
+    const [usersRows] = <span class="cstat-no" title="statement not covered" >await connection.query("SELECT * FROM User");</span>
     const users = <span class="cstat-no" title="statement not covered" >usersRows;</span>
 &nbsp;
 <span class="cstat-no" title="statement not covered" >    res.json({</span>
@@ -428,10 +434,10 @@ export const postPointByUserId = <span class="fstat-no" title="function not cove
     }
 &nbsp;
     // Update the user's points based on the provided UUID
-<span class="cstat-no" title="statement not covered" >    await dbPool.query("UPDATE User SET points = ? WHERE id = ?", [points, uuid]);</span>
+<span class="cstat-no" title="statement not covered" >    await connection.query("UPDATE User SET points = ? WHERE id = ?", [points, uuid]);</span>
 &nbsp;
     // Fetch the updated user details
-    const [updatedUserRows] = <span class="cstat-no" title="statement not covered" >await dbPool.query("SELECT * FROM User WHERE id = ?", [uuid]);</span>
+    const [updatedUserRows] = <span class="cstat-no" title="statement not covered" >await connection.query("SELECT * FROM User WHERE id = ?", [uuid]);</span>
     const updatedUser = <span class="cstat-no" title="statement not covered" >updatedUserRows[0];</span>
 &nbsp;
 <span class="cstat-no" title="statement not covered" >    res.json({</span>
@@ -462,10 +468,10 @@ export const changeUserRole = <span class="fstat-no" title="function not covered
     }
 &nbsp;
     // Update the user's role based on the provided UUID
-<span class="cstat-no" title="statement not covered" >    await dbPool.query("UPDATE User SET role = ? WHERE id = ?", [newRole, uuid]);</span>
+<span class="cstat-no" title="statement not covered" >    await connection.query("UPDATE User SET role = ? WHERE id = ?", [newRole, uuid]);</span>
 &nbsp;
     // Fetch the updated user details
-    const [updatedUserRows] = <span class="cstat-no" title="statement not covered" >await dbPool.query("SELECT * FROM User WHERE id = ?", [uuid]);</span>
+    const [updatedUserRows] = <span class="cstat-no" title="statement not covered" >await connection.query("SELECT * FROM User WHERE id = ?", [uuid]);</span>
     const updatedUser = <span class="cstat-no" title="statement not covered" >updatedUserRows[0];</span>
 &nbsp;
 <span class="cstat-no" title="statement not covered" >    res.json({</span>
@@ -490,7 +496,7 @@ export const changeUserRole = <span class="fstat-no" title="function not covered
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2024-01-15T15:50:26.746Z
+                at 2024-11-25T07:08:29.838Z
             </div>
         <script src="../prettify.js"></script>
         <script>

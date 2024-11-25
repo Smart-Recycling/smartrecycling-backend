@@ -1,6 +1,6 @@
 import dbPool from "../lib/dbConnect.js";
 
-const connection = await dbPool();
+const connection = dbPool();
 
 export const getPaymentHistory = async (req, res, next) => {
   try {

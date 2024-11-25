@@ -23,9 +23,9 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">94.73% </span>
+                <span class="strong">90% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>18/19</span>
+                <span class='fraction'>18/20</span>
             </div>
         
             
@@ -44,9 +44,9 @@
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">94.73% </span>
+                <span class="strong">90% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>18/19</span>
+                <span class='fraction'>18/20</span>
             </div>
         
             
@@ -57,7 +57,7 @@
         <template id="filterTemplate">
             <div class="quiet">
                 Filter:
-                <input oninput="onInput()" type="search" id="fileSearch">
+                <input type="search" id="fileSearch">
             </div>
         </template>
     </div>
@@ -117,7 +117,10 @@
 <a name='L52'></a><a href='#L52'>52</a>
 <a name='L53'></a><a href='#L53'>53</a>
 <a name='L54'></a><a href='#L54'>54</a>
-<a name='L55'></a><a href='#L55'>55</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L55'></a><a href='#L55'>55</a>
+<a name='L56'></a><a href='#L56'>56</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">7x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">7x</span>
 <span class="cline-any cline-yes">3x</span>
@@ -125,7 +128,6 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">3x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">3x</span>
 <span class="cline-any cline-yes">2x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -146,40 +148,41 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">7x</span>
-<span class="cline-any cline-yes">3x</span>
-<span class="cline-any cline-yes">3x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">3x</span>
-<span class="cline-any cline-yes">3x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">3x</span>
-<span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">2x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import dbPool from "../lib/dbConnect.js";
+&nbsp;
+const connection = dbPool();
 &nbsp;
 export const getTransactionHistory = async (req, res, next) =&gt; {
   try {
     const { user_id } = req.params;
 &nbsp;
     // Check if the user exists
-    const [userResult] = await dbPool.query("SELECT * FROM User WHERE id = ?", [user_id]);
-&nbsp;
+    const [userResult] = await connection.query("SELECT * FROM TransactionPayment WHERE id = ?", [user_id]);
     if (userResult.length === 0) {
       return res.status(404).json({
         status: 404,
@@ -188,7 +191,7 @@ export const getTransactionHistory = async (req, res, next) =&gt; {
     }
 &nbsp;
     // Retrieve transaction history for the user
-    const [transactionHistory] = await dbPool.query("SELECT * FROM ExchangeTransaction et " + "INNER JOIN Item i ON et.items_id = i.id " + "WHERE et.user_id = ?", [user_id]);
+    const [transactionHistory] = await connection.query("SELECT * FROM ExchangeTransaction et " + "INNER JOIN Item i ON et.items_id = i.id " + "WHERE et.user_id = ?", [user_id]);
 &nbsp;
     res.status(200).json({
       status: 200,
@@ -204,8 +207,8 @@ export const createTransactionPayment = async (req, res, next) =&gt; {
     const { transaction_id, payment_method_id, amount, status } = req.body;
 &nbsp;
     // Check if the associated transaction and payment method exist
-    const [transactionResult] = await dbPool.query("SELECT * FROM ExchangeTransaction WHERE id = ?", [transaction_id]);
-    const [paymentMethodResult] = await dbPool.query("SELECT * FROM PaymentMethod WHERE id = ?", [payment_method_id]);
+    const [transactionResult] = await connection.query("SELECT * FROM ExchangeTransaction WHERE id = ?", [transaction_id]);
+    const [paymentMethodResult] = await connection.query("SELECT * FROM PaymentMethod WHERE id = ?", [payment_method_id]);
 &nbsp;
     if (transactionResult.length === 0 || paymentMethodResult.length === 0) {
       return res.status(404).json({
@@ -215,14 +218,14 @@ export const createTransactionPayment = async (req, res, next) =&gt; {
     }
 &nbsp;
     // Insert transaction payment into the database
-    const [createdTransactionPayment] = await dbPool.query("INSERT INTO TransactionPayment (transaction_id, payment_method_id, amount, status) VALUES (?, ?, ?, ?)", [transaction_id, payment_method_id, amount, status]);
+    const [createdTransactionPayment] = await connection.query("INSERT INTO TransactionPayment (transaction_id, payment_method_id, amount, status) VALUES (?, ?, ?, ?)", [transaction_id, payment_method_id, amount, status]);
 &nbsp;
     res.status(201).json({
       status: 201,
       data: createdTransactionPayment,
     });
   } catch (error) {
-    next(error);
+<span class="cstat-no" title="statement not covered" >    next(error);</span>
   }
 };
 &nbsp;</pre></td></tr></table></pre>
@@ -232,7 +235,7 @@ export const createTransactionPayment = async (req, res, next) =&gt; {
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2024-01-15T15:50:26.746Z
+                at 2024-11-25T07:08:29.838Z
             </div>
         <script src="../prettify.js"></script>
         <script>
