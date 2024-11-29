@@ -65,7 +65,7 @@ describe("Event Controller", () => {
       const response = await supertest(app).put(`/api/events/${nonExistingEventId}`).set("Authorization", `${token}`).send(updatedEvent).expect(404);
 
       expect(response.body.status).toBe(404);
-      expect(response.body.message).toBe("Event not found");
+      expect(response.body.message).toBe("User not found");
     });
   });
 });

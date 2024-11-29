@@ -30,6 +30,22 @@ export const createReport = async (req, res, next) => {
   try {
     const { email, subject, location, user_id } = req.body;
 
+    const data = verifyToken(req.headers.access_token);
+
+    if (!data) {
+      return res.status(401).json({
+        status: 401,
+        message: "Unauthorized: Bearer token required",
+      });
+    };
+
+    if (!email || !subject || !location || !user_id) {
+      return res.status(422).json({
+        status: 422,
+        message: "Please fill in all fields",
+      });
+    }
+
     // Insert the report using raw SQL
     const [createdReport] = await connection.query("INSERT INTO Report (email, subject, location, user_id) VALUES (?, ?, ?, ?)", [email, subject, location, user_id]);
 
