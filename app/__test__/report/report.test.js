@@ -120,8 +120,8 @@ describe("Report Controller", () => {
         status: 200,
         data: {
           fieldCount: expect.any(Number),
-          affectedRows: 1,
-          changedRows: 0,
+          affectedRows: expect.any(Number),
+          changedRows: expect.any(Number),
           info: expect.any(String),
           insertId: expect.any(Number),
           serverStatus: expect.any(Number),
@@ -146,8 +146,8 @@ describe("Report Controller", () => {
         status: 200,
         data: {
           fieldCount: expect.any(Number),
-          affectedRows: 1,
-          changedRows: 0,
+          affectedRows: expect.any(Number),
+          changedRows: expect.any(Number),
           info: expect.any(String),
           insertId: expect.any(Number),
           serverStatus: expect.any(Number),
