@@ -15,7 +15,6 @@ export const getTransactionHistory = async (req, res, next) => {
       });
     }
 
-    // Retrieve transaction history for the user
     const [transactionHistory] = await connection.query("SELECT * FROM ExchangeTransaction et " + "INNER JOIN Item i ON et.items_id = i.id " + "WHERE et.user_id = ?", [user_id]);
 
     res.status(200).json({
@@ -31,7 +30,6 @@ export const createTransactionPayment = async (req, res, next) => {
   try {
     const { transaction_id, payment_method_id, amount, status } = req.body;
 
-    // Check if the associated transaction and payment method exist
     const [transactionResult] = await connection.query("SELECT * FROM ExchangeTransaction WHERE id = ?", [transaction_id]);
     const [paymentMethodResult] = await connection.query("SELECT * FROM PaymentMethod WHERE id = ?", [payment_method_id]);
 

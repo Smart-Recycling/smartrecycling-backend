@@ -30,6 +30,7 @@ export const createEvent = async (req, res, next) => {
   try {
     const { title, description, path_image, user_id } = req.body;
 
+    // Check if the user exists
     const [userResult] = await connection.query("SELECT * FROM User WHERE id = ?", [user_id]);
 
     if (userResult.length === 0) {
@@ -43,12 +44,13 @@ export const createEvent = async (req, res, next) => {
 
     res.status(201).json({
       status: 201,
-      data: createdEvent,
+      data: createdEvent
     });
   } catch (error) {
     next(error);
   }
 };
+
 
 export const updateEvent = async (req, res, next) => {
   try {

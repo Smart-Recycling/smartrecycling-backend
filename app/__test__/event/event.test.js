@@ -6,22 +6,19 @@ const app = server();
 
 describe("Event Controller", () => {
   describe("Create Event", () => {
-    // it("should create a new event", async () => {
-    //   const user = {
-    //     id: "784cb972-734d-4461-9d15-34ddac8c4a6d",
-    //   };
+    it("should create a new event", async () => {
+      const response = await supertest(app)
+        .post("/api/events")
+        .set("Authorization", `${token}`)
+        .send({
+          title: "Test Event",
+          description: "This is a test event.",
+          path_image: "/images/test-event.jpg",
+          user_id: "d0d30848-6dc6-460b-90e4-ab3f16c06df4",
+        });
 
-    //   const newEvent = {
-    //     title: "Test Event",
-    //     description: "This is a test event.",
-    //     path_image: "/images/test-event.jpg",
-    //     user_id: user.id,
-    //   };
-
-    //   const response = await supertest(app).post("/api/events").set("Authorization", `${token}`).send(newEvent).expect(201);
-
-    //   expect(response.body.status).toBe(201);
-    // });
+      expect(response.body.status).toBe(201);
+    });
   });
 
   describe("Get Event", () => {
@@ -39,21 +36,21 @@ describe("Event Controller", () => {
   });
 
   describe("Update Event", () => {
-    // it("should update an existing event", async () => {
-    //   const eventId = "2";
+    it("should update an existing event", async () => {
+      const eventId = "2";
 
-    //   const updatedEvent = {
-    //     title: "Updated Test Event",
-    //     description: "This is an updated test event.",
-    //     path_image: "/images/updated-test-event.jpg",
-    //     user_id: "784cb972-734d-4461-9d15-34ddac8c4a6d",
-    //   };
+      const updatedEvent = {
+        title: "Updated Test Event",
+        description: "This is an updated test event.",
+        path_image: "/images/updated-test-event.jpg",
+        user_id: "d0d30848-6dc6-460b-90e4-ab3f16c06df4",
+      };
 
-    //   const response = await supertest(app).put(`/api/events/${eventId}`).set("Authorization", `${token}`).send(updatedEvent).expect(200);
+      const response = await supertest(app).put(`/api/events/${eventId}`).set("Authorization", `${token}`).send(updatedEvent).expect(200);
 
-    //   expect(response.body.status).toBe(200);
-    //   expect(response.body.message).toBe("Event updated successfully");
-    // });
+      expect(response.body.status).toBe(200);
+      expect(response.body.message).toBe("Event updated successfully");
+    });
 
     it("should return 404 for non-existing event", async () => {
       const nonExistingEventId = "100";
