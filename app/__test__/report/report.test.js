@@ -82,6 +82,7 @@ describe("Report Controller", () => {
 
       const response = await supertest(app)
         .post("/api/report")
+        .set("Authorization", token)
         .send(newReport);
 
       expect(response.body.status).toBe(undefined);
@@ -95,6 +96,42 @@ describe("Report Controller", () => {
       expect(response.body.status).toBe(undefined);
       expect(response.body).toEqual({})
     })
+
+    it("should return 422 if email field is missing", async () => {
+      const response = await supertest(app)
+        .post("/api/report")
+        .set("Authorization", token)
+        .send({
+          email: "",
+          subject: "test",
+          location: "test",
+          user_id: "d0d30848-6dc6-460b-90e4-ab3f16c06df4",
+        });
+
+      expect(response.body.status).toBe(422);
+      expect(response.body).toEqual({
+        status: 422,
+        message: "Please fill in all fields",
+      });
+    });
+
+    it("should return 422 if email valid but other fields are missing", async () => {
+      const response = await supertest(app)
+        .post("/api/report")
+        .set("Authorization", token)
+        .send({
+          email: "testadmin@gmail.com",
+          subject: "",
+          location: "",
+          user_id: "",
+        });
+
+      expect(response.body.status).toBe(422);
+      expect(response.body).toEqual({
+        status: 422,
+        message: "Please fill in all fields"
+      });
+    });
   });
 
   describe("Update Report", () => {

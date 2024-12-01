@@ -23,6 +23,13 @@ export const authController = {
         });
       }
 
+      if (email === "" || password === "") {
+        return res.status(400).json({
+          status: 400,
+          message: "Email and password are required.",
+        });
+      }
+
       const saltRounds = 12;
       const hashPassword = await bcryptjs.hash(password, saltRounds);
 
@@ -98,9 +105,16 @@ export const authController = {
     try {
       const { user } = req.body;
 
-      await connection.query("DELETE FROM RefreshToken WHERE user_id = ?", [
+      const [users] = await connection.query("DELETE FROM RefreshToken WHERE user_id = ?", [
         user.id,
       ]);
+
+      if (users.affectedRows === 0) {
+        return res.status(404).json({
+          status: 404,
+          message: "User not found",
+        });
+      }
 
       res.status(200).json({
         status: 200,

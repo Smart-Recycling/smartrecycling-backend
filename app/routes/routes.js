@@ -14,6 +14,7 @@ const router = Router({ strict: true })
 // Public routes (no token required)
 router.post("/signup", authController.signUp)
 router.post("/signin", authController.signIn)
+router.post("/signout", authController.signOut)
 
 // Protected routes (require token)
 router.get("/events", tokenValidation(), getEvent)

@@ -18,4 +18,4 @@ export const createDatabaseConnection = async () => {
   }
 }
 
-export const token = "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImQwZDMwODQ4LTZkYzYtNDYwYi05MGU0LWFiM2YxNmMwNmRmNCIsImlhdCI6MTczMjg5MzYxMiwiZXhwIjoxNzMyOTA0NDEyfQ.GpIFyXnZfXWyMzgrq-IzJgTE43HsJPo2i3wKhKXjpEE"
+export const token = "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImQwZDMwODQ4LTZkYzYtNDYwYi05MGU0LWFiM2YxNmMwNmRmNCIsImlhdCI6MTczMzAzMzkwNywiZXhwIjoxNzMzMDQ0NzA3fQ.s7mPNjM07YGxAE0FpprtjpdTMUdtnDuJ5bEwWIGpZqk"
