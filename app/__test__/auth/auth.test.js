@@ -131,6 +131,7 @@ describe("Login User Account where password incorrect (/signin)", () => {
 
 describe("POST signout (/signout)", () => {
   beforeAll(async () => {
+    await connection.query("TRUNCATE TABLE RefreshToken");
     await connection.query("INSERT INTO RefreshToken (user_id, token) VALUES ('d0d30848-6dc6-460b-90e4-ab3f16c06df4', 'test')");
   })
 
